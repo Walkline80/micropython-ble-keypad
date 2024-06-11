@@ -1,0 +1,3 @@
+[submodule "blelib"]
+	path = blelib
+	url = https://gitee.com/walkline/micropython-new-ble-library.git

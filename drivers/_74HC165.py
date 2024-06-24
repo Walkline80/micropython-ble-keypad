@@ -11,7 +11,7 @@ class _74HC165(object):
 	PRESSED  = 0
 	RELEASED = 1
 
-	def __init__(self, filter_time_us: int = Config.KeyPadParams.FILTER_TIME):
+	def __init__(self, filter_time_us: int = Config.KeyPadParams.FILTER_TIME_US):
 		self.__filter_time  = filter_time_us
 
 		self.__spi = SPI(1)
@@ -26,16 +26,16 @@ class _74HC165(object):
 			firstbit=SPI.LSB,
 		)
 
-		self.__key_buffer = bytearray([0xff for _ in range(Config.KeyPadParams.BUFFER_COUNT)])
+		self.__key_buffer = bytearray([0xff for _ in range(Config.KeyPadParams.BUFFER_COUNTS)])
 
-		self.__keys_pl = Pin(Config.KeyPadParams.PIN_PL, Pin.OUT, value=1)
-		self.__keys_ce = Pin(Config.KeyPadParams.PIN_CE, Pin.OUT, value=0)
+		self.__keys_pl = Pin(Config.SPIParams.PL, Pin.OUT, value=1)
+		self.__keys_ce = Pin(Config.SPIParams.CE, Pin.OUT, value=0)
 
 	def __scan_keys(self):
 		self.__keys_pl.off()
 		self.__keys_pl.on()
 
-		return bytearray(self.__spi.read(Config.KeyPadParams.BUFFER_COUNT))
+		return bytearray(self.__spi.read(Config.KeyPadParams.BUFFER_COUNTS))
 
 	def get_keys_status(self) -> bool:
 		'''检查按键状态，状态发生变化返回`True`，否则返回`False`'''
@@ -45,7 +45,7 @@ class _74HC165(object):
 		sleep_us(self.__filter_time)
 		buffer_2 = self.__scan_keys()
 
-		for count in range(Config.KeyPadParams.BUFFER_COUNT):
+		for count in range(Config.KeyPadParams.BUFFER_COUNTS):
 			mask = buffer_1[count] ^ buffer_2[count]
 			buffer_2[count] |= mask
 
@@ -61,9 +61,9 @@ class _74HC165(object):
 
 
 def run_test():
-	keypad = _74HC165(Config.KeyPadParams.FILTER_TIME)
+	keypad = _74HC165()
 
-	for index in range(Config.KeyPadParams.BUFFER_COUNT):
+	for index in range(Config.KeyPadParams.BUFFER_COUNTS):
 		title = f'row{index + 1}'
 		print(f'{title:^ 10} ', end='')
 	print()

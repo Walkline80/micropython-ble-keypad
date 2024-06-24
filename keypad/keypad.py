@@ -40,7 +40,7 @@ class KeyPad(_74HC165):
 	]
 
 	def __init__(self, led_status_cb: function = None):
-		_74HC165.__init__(self, filter_time_us=Config.KeyPadParams.FILTER_TIME)
+		_74HC165.__init__(self, filter_time_us=Config.KeyPadParams.FILTER_TIME_US)
 
 		self.__ble_keyboard = BLEKeyboard104(
 			device_name='MP_KB40',
@@ -52,7 +52,7 @@ class KeyPad(_74HC165):
 
 	def __update_kb_data(self):
 		'''根据采样数据更新要发送的键盘数据'''
-		for index in range(Config.KeyPadParams.KEYS_COUNT):
+		for index in range(Config.KeyPadParams.KEY_COUNTS):
 			try:
 				key_code = self.KEY_MAP[1][self.KEY_MAP[0].index(index)]
 
@@ -66,7 +66,7 @@ class KeyPad(_74HC165):
 
 	def __get_key_status(self, index):
 		'''获取键位定义层中指定按键的状态'''
-		if index < 0 or index >= Config.KeyPadParams.KEYS_COUNT:
+		if index < 0 or index >= Config.KeyPadParams.KEY_COUNTS:
 			raise ValueError(f"Index {index} out of range")
 
 		return self.__bitRead(self.__key_buffer[index // 8], index % 8)

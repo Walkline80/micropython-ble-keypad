@@ -2,7 +2,6 @@
 Copyright © 2024 Walkline Wang (https://walkline.wang)
 Gitee: https://gitee.com/walkline/micropython-ble-keypad
 """
-import math
 import sys
 sys.path.append('/blelib')
 
@@ -12,20 +11,21 @@ esp.osdebug(None) # 注释此行可显示详细调试信息
 
 class Config(object):
 	class SPIParams(object):
-		SCK      = 6
-		MOSI     = 7
-		MISO     = 2
+		SCK  = 6
+		MOSI = 7
+		MISO = 2
+		PL   = 4
+		CE   = 5
+
 		BAUDRATE = 4_000_000 # 4Mhz
 
 
 	class KeyPadParams(object):
-		IO_COUNT    = 8 * 5 # 74HC165 * 5
-		KEYS_COUNT  = 40    # 按键数量，不能超过 IO_COUNT 的数量
-		FILTER_TIME = 100
-		PIN_PL      = 4
-		PIN_CE      = 5
-
-		BUFFER_COUNT = math.ceil(IO_COUNT / 8) # 通过 74HC165 采集数据的字节数量
+		CHIP_COUNTS    = 5               # 74HC165 * 5
+		GPIO_COUNTS    = CHIP_COUNTS * 8 # 可用 GPIO 数量
+		KEY_COUNTS     = 40              # 按键数量，不能超过 GPIO_COUNTS 的数量
+		BUFFER_COUNTS  = CHIP_COUNTS     # 通过 74HC165 采集数据的字节数量
+		FILTER_TIME_US = 100             # 按键消抖过滤时间，单位：毫秒
 
 		# 发送键盘按键数据的字节数量，不包括修饰符和占位符
 		REPORT_DATA_COUNT = 13

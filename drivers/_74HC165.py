@@ -8,9 +8,6 @@ from config import Config
 
 
 class _74HC165(object):
-	PRESSED  = 0
-	RELEASED = 1
-
 	def __init__(self, filter_time_us: int = Config.KeyPadParams.FILTER_TIME_US):
 		self.__filter_time  = filter_time_us
 

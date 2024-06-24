@@ -69,20 +69,22 @@ class KeyPad(_74HC165):
 		if index < 0 or index >= Config.KeyPadParams.KEY_COUNTS:
 			raise ValueError(f"Index {index} out of range")
 
-		return self.__bitRead(self.__key_buffer[index // 8], index % 8)
+		status = self.__bitRead(self.__key_buffer[index // 8], index % 8)
+
+		return status ^ 1 if Config.KeyPadParams.PRESSED_LOW else status
 
 	def __set_kb_data(self, key_code: int, status: int):
 		if key_code in self.MODIFIERS:
 			bit_index = self.MODIFIERS[key_code]
 
 			self.__kb_modifier = self.__bitSet(
-				self.__kb_modifier, bit_index, status ^ 1)
+				self.__kb_modifier, bit_index, status)
 		else:
 			byte_index = (key_code - KC.A) // 8
 			bit_index  = (key_code - KC.A) % 8
 
 			self.__kb_data_buffer[byte_index] = self.__bitSet(
-				self.__kb_data_buffer[byte_index], bit_index, status ^ 1)
+				self.__kb_data_buffer[byte_index], bit_index, status)
 
 	def __bitRead(self, data: int, bit: int):
 		return (data >> bit) & 0x01

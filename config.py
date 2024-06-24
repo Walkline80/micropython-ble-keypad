@@ -26,6 +26,7 @@ class Config(object):
 		KEY_COUNTS     = 40              # 按键数量，不能超过 GPIO_COUNTS 的数量
 		BUFFER_COUNTS  = CHIP_COUNTS     # 通过 74HC165 采集数据的字节数量
 		FILTER_TIME_US = 100             # 按键消抖过滤时间，单位：毫秒
+		PRESSED_LOW    = True            # 按键按下时 74HC165 采集到低电平，与电路设计相关
 
 		# 发送键盘按键数据的字节数量，不包括修饰符和占位符
 		REPORT_DATA_COUNT = 13

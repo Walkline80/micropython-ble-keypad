@@ -1,0 +1,11 @@
+#blelib/ble/
+#blelib/devices/hid/keyboard_3
+#blelib/profiles/generic.py
+#blelib/profiles/hid.py
+#blelib/profiles/uart.py
+
+#drivers/
+#keypad/keycode.py
+
+#config.py
+#main.py
